@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stampready Vault — Log In &amp; Register</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        /* ============================================================
+           Stampready Vault — Login & Registration
+           Design tokens
+           ============================================================ */
+
+        :root {
+            /* purple ramp — deep, vibrant, used across right column + illustration */
+            --purple-100: #EDE6FB;
+            --purple-200: #D9C9F7;
+            --purple-300: #B79CF0;
+            --purple-400: #9D7BEA;
+            --purple-500: #8358E0;
+            --purple-600: #6C36D6;
+            --purple-700: #5A24C2;
+            --purple-800: #431A93;
+            --purple-900: #2E1268;
+
+            --panel-purple-start: #5B21C4;
+            --panel-purple-end: #2E1268;
+
+            --ink: #211A33;
+            --ink-soft: #6E6885;
+            --ink-faint: #A7A1BC;
+
+            --white: #FFFFFF;
+            --surface: #FBFAFD;
+            --border: #E7E2F2;
+            --border-strong: #D6CEEC;
+
+            --focus-ring: #B79CF0;
+
+            --font-display: 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
+            --font-body: 'Inter', 'Segoe UI', sans-serif;
+
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 22px;
+
+            --shadow-btn: 0 14px 28px -10px rgba(92, 36, 194, 0.55);
+            --shadow-card: 0 30px 60px -25px rgba(46, 18, 104, 0.35);
+        }
+
+        /* ============================================================
+           Reset
+           ============================================================ */
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--ink);
+            background: var(--white);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1,
+        h2,
+        p,
+        form {
+            margin: 0;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button {
+            font: inherit;
+            border: none;
+            cursor: pointer;
+        }
+
+        input,
+        select {
+            font: inherit;
+            color: inherit;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.001ms !important;
+                transition-duration: 0.001ms !important;
+            }
+        }
+
+        /* ============================================================
+           Page shell — two column layout
+           ============================================================ */
+
+        .page {
+            min-height: 100vh;
+            display: flex;
+        }
+
+        .col {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .col-left {
+            flex: 0 0 44%;
+            max-width: 44%;
+        }
+
+        .col-right {
+            flex: 1 1 56%;
+        }
+
+        /* ---------- Left column : form & views ---------- */
+
+        .col-left {
+            background: var(--white);
+            justify-content: space-between;
+            padding: 40px clamp(28px, 5vw, 88px);
+        }
+
+        .left-inner {
+            width: 100%;
+            max-width: 420px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            min-height: calc(100vh - 80px);
+            position: relative;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-top: 4px;
+        }
+
+        .logo {
+            width: 38px;
+            height: 38px;
+            border-radius: 11px;
+            background: linear-gradient(155deg, var(--purple-500), var(--purple-800));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 16px -8px rgba(92, 36, 194, 0.6);
+            flex-shrink: 0;
+        }
+
+        .brand-name {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 16px;
+            letter-spacing: 0.01em;
+            color: var(--ink);
+        }
+
+        .form-wrap {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 30px 0;
+            animation: fadeIn 0.25s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .view-hidden {
+            display: none !important;
+        }
+
+        .form-wrap h1 {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 30px;
+            letter-spacing: -0.01em;
+            color: var(--ink);
+        }
+
+        .sub {
+            margin-top: 8px;
+            font-size: 14.5px;
+            line-height: 1.5;
+            color: var(--ink-soft);
+        }
+
+        form {
+            margin-top: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .field label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--ink);
+            letter-spacing: 0.01em;
+        }
+
+        .field input,
+        .field select {
+            height: 48px;
+            padding: 0 16px;
+            border-radius: var(--radius-sm);
+            border: 1.5px solid var(--border);
+            background: var(--surface);
+            font-size: 14.5px;
+            color: var(--ink);
+            transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+            width: 100%;
+        }
+
+        .field select {
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236E6885' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 42px;
+            cursor: pointer;
+        }
+
+        .field select:invalid,
+        .field select option[value=""] {
+            color: var(--ink-faint);
+        }
+
+        .field select option {
+            color: var(--ink);
+            background: var(--white);
+        }
+
+        .field input::placeholder {
+            color: var(--ink-faint);
+        }
+
+        .field input:hover,
+        .field select:hover {
+            border-color: var(--border-strong);
+        }
+
+        .field input:focus,
+        .field select:focus {
+            outline: none;
+            border-color: var(--purple-500);
+            background: var(--white);
+            box-shadow: 0 0 0 4px rgba(131, 88, 224, 0.16);
+        }
+
+        /* Inline Message & Alert Box */
+
+        .form-alert {
+            display: none;
+            padding: 12px 14px;
+            border-radius: var(--radius-sm);
+            font-size: 13.5px;
+            line-height: 1.45;
+            margin-top: 14px;
+            animation: alertSlide 0.2s ease-out;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        @keyframes alertSlide {
+            from {
+                opacity: 0;
+                transform: translateY(-4px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-alert.is-visible {
+            display: flex;
+        }
+
+        .form-alert-error {
+            background-color: #FEF2F2;
+            border: 1.5px solid #FCA5A5;
+            color: #991B1B;
+        }
+
+        .form-alert-success {
+            background-color: #F0FDF4;
+            border: 1.5px solid #86EFAC;
+            color: #166534;
+        }
+
+        .form-alert-info {
+            background-color: var(--purple-100);
+            border: 1.5px solid var(--purple-200);
+            color: var(--purple-900);
+        }
+
+        .form-alert svg {
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .form-alert .alert-content {
+            flex: 1;
+        }
+
+        /* row: remember me + forgot password */
+
+        .row-between {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 2px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .checkbox {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .checkbox input {
+            position: absolute;
+            opacity: 0;
+            width: 18px;
+            height: 18px;
+            margin: 0;
+            cursor: pointer;
+        }
+
+        .checkbox .box {
+            width: 18px;
+            height: 18px;
+            border-radius: 5px;
+            border: 1.5px solid var(--border-strong);
+            background: var(--surface);
+            flex-shrink: 0;
+            position: relative;
+            transition: background 0.15s ease, border-color 0.15s ease;
+        }
+
+        .checkbox .box::after {
+            content: "";
+            position: absolute;
+            left: 5px;
+            top: 1px;
+            width: 5px;
+            height: 9px;
+            border: solid var(--white);
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+            opacity: 0;
+            transition: opacity 0.1s ease;
+        }
+
+        .checkbox input:checked+.box {
+            background: var(--purple-600);
+            border-color: var(--purple-600);
+        }
+
+        .checkbox input:checked+.box::after {
+            opacity: 1;
+        }
+
+        .checkbox input:focus-visible+.box {
+            box-shadow: 0 0 0 4px rgba(131, 88, 224, 0.22);
+        }
+
+        .checkbox-label {
+            font-size: 13.5px;
+            color: var(--ink-soft);
+        }
+
+        .link-muted {
+            font-size: 13.5px;
+            color: var(--purple-700);
+            font-weight: 600;
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            text-align: left;
+            font-family: inherit;
+        }
+
+        .link-muted:hover {
+            color: var(--purple-800);
+            text-decoration: underline;
+        }
+
+        /* primary CTA */
+
+        .btn-primary {
+            margin-top: 6px;
+            width: 100%;
+            height: 52px;
+            border-radius: var(--radius-sm);
+            background: linear-gradient(135deg, var(--purple-500), var(--purple-700));
+            color: var(--white);
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 13.5px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            box-shadow: var(--shadow-btn);
+            transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-primary:hover {
+            filter: brightness(1.06);
+            transform: translateY(-1px);
+            box-shadow: 0 18px 32px -10px rgba(92, 36, 194, 0.62);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary:focus-visible {
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(131, 88, 224, 0.3), var(--shadow-btn);
+        }
+
+        .link-register {
+            display: block;
+            text-align: center;
+            margin-top: 4px;
+            font-size: 12.5px;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--ink-faint);
+            padding: 6px 0;
+            cursor: pointer;
+            background: none;
+            border: none;
+            width: 100%;
+            font-family: inherit;
+        }
+
+        .link-register:hover {
+            color: var(--purple-700);
+        }
+
+        .foot-note {
+            font-size: 12px;
+            color: var(--ink-faint);
+            text-align: center;
+            padding-bottom: 4px;
+        }
+
+        /* ---------- Right column : brand panel ---------- */
+
+        .col-right {
+            background:
+                radial-gradient(120% 90% at 15% 0%, rgba(255, 255, 255, 0.10), transparent 55%),
+                linear-gradient(160deg, var(--panel-purple-start) 0%, var(--panel-purple-end) 100%);
+            color: var(--white);
+            align-items: center;
+            justify-content: center;
+            padding: 56px 48px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .right-inner {
+            width: 100%;
+            max-width: 560px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            text-align: center;
+        }
+
+        .right-copy h2 {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: clamp(28px, 3.2vw, 38px);
+            letter-spacing: 0.04em;
+            color: var(--white);
+        }
+
+        .right-copy p {
+            margin-top: 14px;
+            font-size: 15.5px;
+            line-height: 1.6;
+            color: var(--purple-100);
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .illustration {
+            width: 100%;
+            max-width: 480px;
+            aspect-ratio: 520 / 460;
+            margin-top: 12px;
+        }
+
+        .illustration svg {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* ============================================================
+           Responsive
+           ============================================================ */
+
+        @media (max-width: 980px) {
+            .page {
+                flex-direction: column;
+            }
+
+            .col-left {
+                flex-basis: auto;
+                max-width: 100%;
+            }
+
+            .col-right {
+                flex-basis: auto;
+                order: -1;
+                padding: 40px 32px 32px;
+                min-height: auto;
+            }
+
+            .right-copy p {
+                display: none;
+            }
+
+            .illustration {
+                max-width: 300px;
+                margin-top: 16px;
+            }
+
+            .col-left {
+                padding: 36px 24px 48px;
+            }
+
+            .left-inner {
+                min-height: auto;
+            }
+
+            .form-wrap {
+                padding: 36px 0 8px;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .right-copy h2 {
+                font-size: 24px;
+                letter-spacing: 0.03em;
+            }
+
+            .illustration {
+                max-width: 230px;
+            }
+
+            .form-wrap h1 {
+                font-size: 25px;
+            }
+
+            .btn-primary {
+                font-size: 12.5px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .row-between {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="page">
+
+        <!-- LEFT COLUMN — FORMS -->
+        <section class="col col-left">
+            <div class="left-inner">
+
+                <div class="brand">
+                    <div class="logo" aria-hidden="true">
+                        <svg viewBox="0 0 40 40" width="22" height="22">
+                            <path
+                                d="M28.5 12.2c-1.6-2-4.4-3.3-8-3.3-5.6 0-9.3 2.8-9.3 6.9 0 3.6 2.6 5.3 7.6 6.4l3 .6c3 .6 4.3 1.5 4.3 3.2 0 2-1.9 3.2-4.9 3.2-3.3 0-5.6-1.2-6.9-3.6l-4 2c1.8 3.5 5.6 5.5 10.7 5.5 6 0 9.9-2.9 9.9-7.4 0-3.7-2.4-5.6-7.6-6.7l-3-.6c-3-.6-4.3-1.4-4.3-3 0-1.8 1.8-2.9 4.5-2.9 2.8 0 4.9 1.1 6.1 3.1l3.9-2.4z"
+                                fill="white" />
+                        </svg>
+                    </div>
+                    <span class="brand-name">Stampready</span>
+                </div>
+
+                <!-- 1. LOGIN VIEW -->
+                <div class="form-wrap" id="login-view">
+                    <h1>Welcome back</h1>
+                    <p class="sub">Log in to manage your modules, builds and services.</p>
+
+                    <div id="login-alert" class="form-alert" role="alert" aria-live="polite">
+                        <span id="login-alert-icon"></span>
+                        <div class="alert-content" id="login-alert-text"></div>
+                    </div>
+
+                    <form id="login-form" novalidate>
+
+                        <div class="field">
+                            <label for="login-email">Email Address</label>
+                            <input type="email" id="login-email" name="email" placeholder="john@doe.com"
+                                autocomplete="username" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="login-password">Password</label>
+                            <input type="password" id="login-password" name="password" placeholder="******"
+                                autocomplete="current-password" required>
+                        </div>
+
+                        <div class="row-between">
+                            <label class="checkbox">
+                                <input type="checkbox" id="remember-me" name="remember">
+                                <span class="box" aria-hidden="true"></span>
+                                <span class="checkbox-label">Remember Me</span>
+                            </label>
+                            <button type="button" class="link-muted" id="btn-forgot-password">Forgot Password?</button>
+                        </div>
+
+                        <button type="submit" id="btn-login-submit" class="btn-primary">Login to Dashboard</button>
+
+                        <button type="button" id="btn-switch-to-register" class="link-register">Or Register</button>
+
+                    </form>
+                </div>
+
+                <!-- 2. REGISTRATION VIEW WITH ROLE SELECTION -->
+                <div class="form-wrap view-hidden" id="register-view">
+                    <h1>Create Account</h1>
+                    <p class="sub">Register to access modules, builds and services.</p>
+
+                    <div id="register-alert" class="form-alert" role="alert" aria-live="polite">
+                        <span id="register-alert-icon"></span>
+                        <div class="alert-content" id="register-alert-text"></div>
+                    </div>
+
+                    <form id="register-form" novalidate>
+
+                        <div class="field">
+                            <label for="reg-fullname">Full Name</label>
+                            <input type="text" id="reg-fullname" name="fullName" placeholder="John Doe"
+                                autocomplete="name" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="reg-email">Email Address</label>
+                            <input type="email" id="reg-email" name="email" placeholder="john@doe.com"
+                                autocomplete="email" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="reg-role">Role</label>
+                            <select id="reg-role" name="role" required>
+                                <option value="" disabled selected>Select Role</option>
+                                <option value="student">Student</option>
+                                <option value="parent">Parent</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label for="reg-password">Password</label>
+                            <input type="password" id="reg-password" name="password" placeholder="******"
+                                autocomplete="new-password" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="reg-confirm-password">Confirm Password</label>
+                            <input type="password" id="reg-confirm-password" name="confirmPassword" placeholder="******"
+                                autocomplete="new-password" required>
+                        </div>
+
+                        <button type="submit" id="btn-register-submit" class="btn-primary">Register Account</button>
+
+                        <button type="button" id="btn-switch-to-login" class="link-register">Already have an account?
+                            Login</button>
+
+                    </form>
+                </div>
+
+                <p class="foot-note">© 2026 Stampready Vault. All rights reserved.</p>
+            </div>
+        </section>
+
+        <!-- RIGHT COLUMN — BRAND / ILLUSTRATION -->
+        <section class="col col-right">
+            <div class="right-inner">
+
+                <div class="right-copy">
+                    <h2>STAMPREADY VAULT</h2>
+                    <p>Select from hundreds of premium modules. Plans start from $9.5 per month.</p>
+                </div>
+
+                <div class="illustration" aria-hidden="true">
+                    <svg viewBox="0 0 520 460" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+
+                        <defs>
+                            <radialGradient id="glow" cx="50%" cy="42%" r="60%">
+                                <stop offset="0%" stop-color="var(--purple-300)" stop-opacity="0.55" />
+                                <stop offset="100%" stop-color="var(--purple-300)" stop-opacity="0" />
+                            </radialGradient>
+                        </defs>
+
+                        <ellipse cx="262" cy="200" rx="220" ry="200" fill="url(#glow)" />
+
+                        <!-- ground shadow -->
+                        <ellipse cx="262" cy="392" rx="108" ry="18" fill="#2A0F5C" opacity="0.35" />
+
+                        <!-- ===== floating micro-cubes ===== -->
+
+                        <!-- cube: gear / tools -->
+                        <g transform="translate(72,120)">
+                            <polygon points="34,0 68,17 34,34 0,17" fill="var(--purple-200)" />
+                            <polygon points="0,17 34,34 34,70 0,53" fill="var(--purple-500)" />
+                            <polygon points="68,17 34,34 34,70 68,53" fill="var(--purple-700)" />
+                            <g transform="translate(34,34)" fill="none" stroke="#FFFFFF" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" opacity="0.92">
+                                <circle cx="0" cy="8" r="6" />
+                                <path
+                                    d="M0 -1v-4M0 17v4M-8 8h-4M8 8h4M-5.7 2.3l-3-3M5.7 2.3l3-3M-5.7 13.7l-3 3M5.7 13.7l3 3" />
+                            </g>
+                        </g>
+
+                        <!-- cube: layers / modules -->
+                        <g transform="translate(378,96)">
+                            <polygon points="30,0 60,15 30,30 0,15" fill="var(--purple-200)" />
+                            <polygon points="0,15 30,30 30,62 0,47" fill="var(--purple-500)" />
+                            <polygon points="60,15 30,30 30,62 60,47" fill="var(--purple-700)" />
+                            <g transform="translate(30,29)" fill="none" stroke="#FFFFFF" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" opacity="0.92">
+                                <path d="M-9 -4 0 -9 9 -4 0 1z" />
+                                <path d="M-9 3 0 8 9 3" />
+                                <path d="M-9 10 0 15 9 10" />
+                            </g>
+                        </g>
+
+                        <!-- cube: plug / connect -->
+                        <g transform="translate(408,238)">
+                            <polygon points="28,0 56,14 28,28 0,14" fill="var(--purple-200)" />
+                            <polygon points="0,14 28,28 28,58 0,44" fill="var(--purple-500)" />
+                            <polygon points="56,14 28,28 28,58 56,44" fill="var(--purple-700)" />
+                            <g transform="translate(28,27)" fill="none" stroke="#FFFFFF" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" opacity="0.92">
+                                <path d="M-6 -8v6M6 -8v6M-9 -2h18a2 2 0 0 1 2 2v3a11 11 0 0 1-22 0v-3a2 2 0 0 1 2-2z" />
+                                <path d="M0 13v6" />
+                            </g>
+                        </g>
+
+                        <!-- cube: blocks / building -->
+                        <g transform="translate(88,272)">
+                            <polygon points="26,0 52,13 26,26 0,13" fill="var(--purple-200)" />
+                            <polygon points="0,13 26,26 26,54 0,41" fill="var(--purple-500)" />
+                            <polygon points="52,13 26,26 26,54 52,41" fill="var(--purple-700)" />
+                            <g transform="translate(26,25)" fill="#FFFFFF" opacity="0.92">
+                                <rect x="-8" y="-8" width="6" height="6" rx="1" />
+                                <rect x="2" y="-8" width="6" height="6" rx="1" />
+                                <rect x="-8" y="2" width="6" height="6" rx="1" />
+                                <rect x="2" y="2" width="6" height="6" rx="1" />
+                            </g>
+                        </g>
+
+                        <!-- cube: cloud / service -->
+                        <g transform="translate(140,52)">
+                            <polygon points="22,0 44,11 22,22 0,11" fill="var(--purple-200)" />
+                            <polygon points="0,11 22,22 22,46 0,35" fill="var(--purple-500)" />
+                            <polygon points="44,11 22,22 22,46 44,35" fill="var(--purple-700)" />
+                            <g transform="translate(22,21)" fill="none" stroke="#FFFFFF" stroke-width="1.8"
+                                stroke-linecap="round" stroke-linejoin="round" opacity="0.9">
+                                <path d="M-7 3a4 4 0 0 1 1-7.9 5 5 0 0 1 9.6-1.6A4.2 4.2 0 0 1 8 3z" />
+                            </g>
+                        </g>
+
+                        <!-- ===== robot ===== -->
+                        <g transform="translate(262,244)">
+
+                            <!-- antenna -->
+                            <line x1="0" y1="-150" x2="0" y2="-132" stroke="var(--purple-100)" stroke-width="3"
+                                stroke-linecap="round" />
+                            <circle cx="0" cy="-155" r="7" fill="var(--purple-100)" />
+                            <circle cx="0" cy="-155" r="3" fill="#FFFFFF" />
+
+                            <!-- head: iso cube -->
+                            <g transform="translate(0,-95)">
+                                <polygon points="0,-40 48,-16 0,8 -48,-16" fill="var(--purple-100)" />
+                                <polygon points="-48,-16 0,8 0,44 -48,20" fill="var(--purple-400)" />
+                                <polygon points="48,-16 0,8 0,44 48,20" fill="var(--purple-600)" />
+                                <!-- flat screen-face plate mounted on the front seam -->
+                                <g transform="translate(0,12)">
+                                    <rect x="-26" y="-16" width="52" height="34" rx="8" fill="#241246" />
+                                    <circle cx="-9" cy="-1" r="3.4" fill="#C9B6FF" />
+                                    <circle cx="9" cy="-1" r="3.4" fill="#C9B6FF" />
+                                    <path d="M-8 9 Q0 15 8 9" stroke="#C9B6FF" stroke-width="2.2" fill="none"
+                                        stroke-linecap="round" />
+                                </g>
+                            </g>
+
+                            <!-- torso: iso cube -->
+                            <g transform="translate(0,20)">
+                                <polygon points="0,-36 62,-2 0,32 -62,-2" fill="var(--purple-200)" />
+                                <polygon points="-62,-2 0,32 0,90 -62,56" fill="var(--purple-500)" />
+                                <polygon points="62,-2 0,32 0,90 62,56" fill="var(--purple-700)" />
+                                <!-- flat control-panel plate on the front seam -->
+                                <g transform="translate(0,44)">
+                                    <rect x="-24" y="-17" width="48" height="30" rx="7" fill="none" stroke="#F3EEFF"
+                                        stroke-width="2.2" />
+                                    <line x1="-15" y1="-5" x2="15" y2="-5" stroke="#F3EEFF" stroke-width="2.2"
+                                        stroke-linecap="round" />
+                                    <line x1="-15" y1="4" x2="6" y2="4" stroke="#F3EEFF" stroke-width="2.2"
+                                        stroke-linecap="round" opacity="0.6" />
+                                </g>
+                            </g>
+
+                            <!-- base -->
+                            <g transform="translate(0,116)">
+                                <polygon points="0,-16 78,20 0,56 -78,20" fill="var(--purple-300)" />
+                                <polygon points="-78,20 0,56 0,70 -78,34" fill="var(--purple-600)" />
+                                <polygon points="78,20 0,56 0,70 78,34" fill="var(--purple-800)" />
+                            </g>
+
+                        </g>
+
+                    </svg>
+                </div>
+
+            </div>
+        </section>
+
+    </div>
+
+    <!-- ============================================================
+       Frontend-only Authentication & User Management Script
+       ============================================================ -->
+    <script>
+        (function () {
+            'use strict';
+
+            // LocalStorage and SessionStorage keys
+            const STORAGE_KEY_USERS = 'stampready_users';
+            const STORAGE_KEY_CURRENT_USER = 'stampready_current_user';
+
+            // Valid roles
+            const VALID_ROLES = ['student', 'parent'];
+
+            // DOM Elements
+            const loginView = document.getElementById('login-view');
+            const registerView = document.getElementById('register-view');
+
+            const loginForm = document.getElementById('login-form');
+            const loginEmailInput = document.getElementById('login-email');
+            const loginPasswordInput = document.getElementById('login-password');
+            const rememberMeCheckbox = document.getElementById('remember-me');
+            const btnForgotPassword = document.getElementById('btn-forgot-password');
+            const btnSwitchToRegister = document.getElementById('btn-switch-to-register');
+            const loginAlert = document.getElementById('login-alert');
+            const loginAlertText = document.getElementById('login-alert-text');
+            const loginAlertIcon = document.getElementById('login-alert-icon');
+
+            const registerForm = document.getElementById('register-form');
+            const regFullnameInput = document.getElementById('reg-fullname');
+            const regEmailInput = document.getElementById('reg-email');
+            const regRoleSelect = document.getElementById('reg-role');
+            const regPasswordInput = document.getElementById('reg-password');
+            const regConfirmPasswordInput = document.getElementById('reg-confirm-password');
+            const btnSwitchToLogin = document.getElementById('btn-switch-to-login');
+            const registerAlert = document.getElementById('register-alert');
+            const registerAlertText = document.getElementById('register-alert-text');
+            const registerAlertIcon = document.getElementById('register-alert-icon');
+
+            // SVG Icons for Alerts
+            const alertIcons = {
+                error: `<svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>`,
+                success: `<svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>`,
+                info: `<svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>`
+            };
+
+            // ============================================================
+            // Storage Helper Functions
+            // ============================================================
+
+            /**
+             * Retrieve list of registered users from localStorage.
+             * @returns {Array<Object>}
+             */
+            function getUsers() {
+                try {
+                    const data = localStorage.getItem(STORAGE_KEY_USERS);
+                    return data ? JSON.parse(data) : [];
+                } catch (e) {
+                    console.error('Error reading users from localStorage:', e);
+                    return [];
+                }
+            }
+
+            /**
+             * Save list of users to localStorage.
+             * @param {Array<Object>} users
+             */
+            function saveUsers(users) {
+                try {
+                    localStorage.setItem(STORAGE_KEY_USERS, JSON.stringify(users));
+                } catch (e) {
+                    console.error('Error saving users to localStorage:', e);
+                }
+            }
+
+            /**
+             * Retrieve the currently authenticated user from sessionStorage or localStorage.
+             * @returns {{ user: Object, isPersistent: boolean } | null}
+             */
+            function getCurrentUser() {
+                try {
+                    // Check sessionStorage first (temporary session)
+                    const sessionData = sessionStorage.getItem(STORAGE_KEY_CURRENT_USER);
+                    if (sessionData) {
+                        return { user: JSON.parse(sessionData), isPersistent: false };
+                    }
+                    // Check localStorage (persistent session)
+                    const localData = localStorage.getItem(STORAGE_KEY_CURRENT_USER);
+                    if (localData) {
+                        return { user: JSON.parse(localData), isPersistent: true };
+                    }
+                } catch (e) {
+                    console.error('Error reading current user session:', e);
+                }
+                return null;
+            }
+
+            /**
+             * Store authenticated user session.
+             * @param {Object} user - User object (excluding sensitive fields like password).
+             * @param {boolean} rememberMe - Whether to persist across browser restarts.
+             */
+            function setCurrentUser(user, rememberMe) {
+                // Ensure no password is stored in the current session object
+                const sessionUser = {
+                    id: user.id,
+                    fullName: user.fullName,
+                    email: user.email,
+                    role: user.role,
+                    createdAt: user.createdAt || new Date().toISOString(),
+                    loggedInAt: new Date().toISOString()
+                };
+
+                try {
+                    if (rememberMe) {
+                        localStorage.setItem(STORAGE_KEY_CURRENT_USER, JSON.stringify(sessionUser));
+                        sessionStorage.removeItem(STORAGE_KEY_CURRENT_USER);
+                    } else {
+                        sessionStorage.setItem(STORAGE_KEY_CURRENT_USER, JSON.stringify(sessionUser));
+                        localStorage.removeItem(STORAGE_KEY_CURRENT_USER);
+                    }
+                } catch (e) {
+                    console.error('Error setting current user session:', e);
+                }
+            }
+
+            /**
+             * Remove user session from both localStorage and sessionStorage.
+             */
+            function clearCurrentUser() {
+                try {
+                    localStorage.removeItem(STORAGE_KEY_CURRENT_USER);
+                    sessionStorage.removeItem(STORAGE_KEY_CURRENT_USER);
+                } catch (e) {
+                    console.error('Error clearing current user session:', e);
+                }
+            }
+
+            /**
+             * Generate a unique ID for registered users.
+             * @returns {string}
+             */
+            function generateUserId() {
+                if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+                    return 'usr_' + crypto.randomUUID().replace(/-/g, '').slice(0, 12);
+                }
+                return 'usr_' + Date.now().toString(36) + Math.random().toString(36).substring(2, 8);
+            }
+
+            /**
+             * Validate email format with standard pattern.
+             * @param {string} email
+             * @returns {boolean}
+             */
+            function isValidEmail(email) {
+                const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return re.test(email);
+            }
+
+            /**
+             * Redirect authenticated user to their role-based dashboard page.
+             * @param {string} role
+             */
+            function redirectToDashboard(role) {
+                if (role === 'student') {
+                    window.location.href = 'student-dashboard.html';
+                } else if (role === 'parent') {
+                    window.location.href = 'parent-dashboard.html';
+                }
+            }
+
+            // ============================================================
+            // UI & Message Helper Functions
+            // ============================================================
+
+            /**
+             * Display an inline alert message in the specified form view.
+             * @param {'login'|'register'} formType
+             * @param {string} message
+             * @param {'error'|'success'|'info'} type
+             */
+            function showMessage(formType, message, type = 'error') {
+                const alertEl = formType === 'login' ? loginAlert : registerAlert;
+                const textEl = formType === 'login' ? loginAlertText : registerAlertText;
+                const iconEl = formType === 'login' ? loginAlertIcon : registerAlertIcon;
+
+                if (!alertEl || !textEl || !iconEl) return;
+
+                alertEl.className = 'form-alert is-visible form-alert-' + type;
+                iconEl.innerHTML = alertIcons[type] || alertIcons.info;
+                textEl.textContent = message;
+            }
+
+            /**
+             * Clear inline alert messages.
+             * @param {'login'|'register'|'all'} [target='all']
+             */
+            function clearMessage(target = 'all') {
+                if (target === 'login' || target === 'all') {
+                    if (loginAlert) {
+                        loginAlert.className = 'form-alert';
+                        if (loginAlertText) loginAlertText.textContent = '';
+                    }
+                }
+                if (target === 'register' || target === 'all') {
+                    if (registerAlert) {
+                        registerAlert.className = 'form-alert';
+                        if (registerAlertText) registerAlertText.textContent = '';
+                    }
+                }
+            }
+
+            /**
+             * Switch interface to the Login view.
+             */
+            function showLogin() {
+                registerView.classList.add('view-hidden');
+                loginView.classList.remove('view-hidden');
+                clearMessage('register');
+                setTimeout(() => loginEmailInput.focus(), 50);
+            }
+
+            /**
+             * Switch interface to the Registration view.
+             */
+            function showRegister() {
+                loginView.classList.add('view-hidden');
+                registerView.classList.remove('view-hidden');
+                clearMessage('login');
+                registerForm.reset();
+                setTimeout(() => regFullnameInput.focus(), 50);
+            }
+
+            // ============================================================
+            // Core Authentication & Registration Logic
+            // ============================================================
+
+            /**
+             * Handle user registration with role selection.
+             * @param {Event} e
+             */
+            function registerUser(e) {
+                if (e) e.preventDefault();
+                clearMessage('register');
+
+                const fullName = regFullnameInput.value.trim();
+                const rawEmail = regEmailInput.value.trim();
+                const email = rawEmail.toLowerCase();
+                const role = regRoleSelect.value ? regRoleSelect.value.trim().toLowerCase() : '';
+                const password = regPasswordInput.value;
+                const confirmPassword = regConfirmPasswordInput.value;
+
+                // 1. Validate full name
+                if (!fullName) {
+                    showMessage('register', 'Please enter your full name.', 'error');
+                    regFullnameInput.focus();
+                    return;
+                }
+
+                // 2. Validate email
+                if (!rawEmail) {
+                    showMessage('register', 'Please enter your email address.', 'error');
+                    regEmailInput.focus();
+                    return;
+                }
+
+                if (!isValidEmail(email)) {
+                    showMessage('register', 'Please enter a valid email address.', 'error');
+                    regEmailInput.focus();
+                    return;
+                }
+
+                // 3. Validate role
+                if (!role || !VALID_ROLES.includes(role)) {
+                    showMessage('register', 'Please select a role (Student or Parent).', 'error');
+                    regRoleSelect.focus();
+                    return;
+                }
+
+                // 4. Validate passwords
+                if (!password) {
+                    showMessage('register', 'Please create a password.', 'error');
+                    regPasswordInput.focus();
+                    return;
+                }
+
+                if (!confirmPassword) {
+                    showMessage('register', 'Please confirm your password.', 'error');
+                    regConfirmPasswordInput.focus();
+                    return;
+                }
+
+                if (password !== confirmPassword) {
+                    showMessage('register', 'Passwords do not match. Please try again.', 'error');
+                    regConfirmPasswordInput.focus();
+                    return;
+                }
+
+                // 5. Check for duplicate account
+                const users = getUsers();
+                const userExists = users.some(u => u.email && u.email.trim().toLowerCase() === email);
+
+                if (userExists) {
+                    showMessage('register', 'An account with this email already exists.', 'error');
+                    regEmailInput.focus();
+                    return;
+                }
+
+                // 6. Create new user object with role and persist
+                const newUser = {
+                    id: generateUserId(),
+                    fullName: fullName,
+                    email: email,
+                    role: role,
+                    password: password,
+                    createdAt: new Date().toISOString()
+                };
+
+                users.push(newUser);
+                saveUsers(users);
+
+                // 7. Reset form, switch to login view and show success message
+                registerForm.reset();
+                showLogin();
+                loginEmailInput.value = email;
+                loginPasswordInput.value = '';
+                showMessage('login', 'Registration successful. You can now log in.', 'success');
+                loginPasswordInput.focus();
+            }
+
+            /**
+             * Handle user login, role verification, and redirect to role-based dashboard.
+             * @param {Event} e
+             */
+            function loginUser(e) {
+                if (e) e.preventDefault();
+                clearMessage('login');
+
+                const rawEmail = loginEmailInput.value.trim();
+                const email = rawEmail.toLowerCase();
+                const password = loginPasswordInput.value;
+                const rememberMe = rememberMeCheckbox.checked;
+
+                if (!rawEmail || !password) {
+                    showMessage('login', 'Please enter both your email address and password.', 'error');
+                    return;
+                }
+
+                if (!isValidEmail(email)) {
+                    showMessage('login', 'Invalid email or password.', 'error');
+                    return;
+                }
+
+                // Read users from localStorage
+                const users = getUsers();
+                const matchedUser = users.find(u =>
+                    u.email &&
+                    u.email.trim().toLowerCase() === email &&
+                    u.password === password
+                );
+
+                if (!matchedUser) {
+                    showMessage('login', 'Invalid email or password.', 'error');
+                    loginPasswordInput.value = '';
+                    loginPasswordInput.focus();
+                    return;
+                }
+
+                // Verify the account has a valid role (handles legacy accounts without role gracefully)
+                const userRole = matchedUser.role ? matchedUser.role.trim().toLowerCase() : '';
+                if (!userRole || !VALID_ROLES.includes(userRole)) {
+                    showMessage('login', 'This account does not have a valid role. Please register again.', 'error');
+                    return;
+                }
+
+                // Successful authentication with validated role
+                setCurrentUser(matchedUser, rememberMe);
+                loginForm.reset();
+
+                // Redirect to role-based dashboard page
+                redirectToDashboard(userRole);
+            }
+
+            /**
+             * Handle forgot password click (Frontend explanation notice).
+             */
+            function handleForgotPassword(e) {
+                if (e) e.preventDefault();
+                showMessage('login', 'Password reset requires a backend email service and is not available in this frontend-only demo.', 'info');
+            }
+
+            // ============================================================
+            // Event Listeners Setup
+            // ============================================================
+
+            loginForm.addEventListener('submit', loginUser);
+            registerForm.addEventListener('submit', registerUser);
+
+            btnSwitchToRegister.addEventListener('click', function (e) {
+                e.preventDefault();
+                showRegister();
+            });
+
+            btnSwitchToLogin.addEventListener('click', function (e) {
+                e.preventDefault();
+                showLogin();
+            });
+
+            btnForgotPassword.addEventListener('click', handleForgotPassword);
+
+            // Clear errors on typing or selection
+            [loginEmailInput, loginPasswordInput].forEach(input => {
+                input.addEventListener('input', () => {
+                    if (loginAlert.classList.contains('form-alert-error')) {
+                        clearMessage('login');
+                    }
+                });
+            });
+
+            [regFullnameInput, regEmailInput, regRoleSelect, regPasswordInput, regConfirmPasswordInput].forEach(input => {
+                input.addEventListener('input', () => {
+                    if (registerAlert.classList.contains('form-alert-error')) {
+                        clearMessage('register');
+                    }
+                });
+                input.addEventListener('change', () => {
+                    if (registerAlert.classList.contains('form-alert-error')) {
+                        clearMessage('register');
+                    }
+                });
+            });
+
+            // ============================================================
+            // App Initialization
+            // ============================================================
+            function init() {
+                const currentSession = getCurrentUser();
+                if (currentSession && currentSession.user && currentSession.user.role && VALID_ROLES.includes(currentSession.user.role)) {
+                    // Auto-redirect if already logged in
+                    redirectToDashboard(currentSession.user.role);
+                } else {
+                    if (currentSession) {
+                        clearCurrentUser();
+                    }
+                    showLogin();
+                }
+            }
+
+            // Expose helper functions on window for debugging & testing
+            window.StampreadyAuth = {
+                getUsers,
+                saveUsers,
+                registerUser,
+                loginUser,
+                getCurrentUser,
+                setCurrentUser,
+                clearCurrentUser,
+                showLogin,
+                showRegister,
+                redirectToDashboard,
+                showMessage
+            };
+
+            // Run initialization
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+        })();
+    </script>
+</body>
+
+</html>

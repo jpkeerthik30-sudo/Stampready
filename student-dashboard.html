@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stampready Vault — Student Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        /* ============================================================
+           Stampready Vault — Student Dashboard Design Tokens & Layout
+           ============================================================ */
+
+        :root {
+            --purple-100: #EDE6FB;
+            --purple-200: #D9C9F7;
+            --purple-300: #B79CF0;
+            --purple-400: #9D7BEA;
+            --purple-500: #8358E0;
+            --purple-600: #6C36D6;
+            --purple-700: #5A24C2;
+            --purple-800: #431A93;
+            --purple-900: #2E1268;
+
+            --ink: #211A33;
+            --ink-soft: #6E6885;
+            --ink-faint: #A7A1BC;
+
+            --white: #FFFFFF;
+            --surface: #FBFAFD;
+            --surface-card: #FFFFFF;
+            --border: #E7E2F2;
+            --border-strong: #D6CEEC;
+
+            --font-display: 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
+            --font-body: 'Inter', 'Segoe UI', sans-serif;
+
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 20px;
+
+            --shadow-sm: 0 4px 12px -2px rgba(33, 26, 51, 0.05);
+            --shadow-card: 0 10px 30px -10px rgba(92, 36, 194, 0.08), 0 2px 8px -2px rgba(33, 26, 51, 0.04);
+            --shadow-btn: 0 8px 20px -6px rgba(92, 36, 194, 0.45);
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: var(--font-body);
+            color: var(--ink);
+            background: #F8F6FC;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3, p {
+            margin: 0;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button {
+            font: inherit;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* ---------- Top Navbar ---------- */
+
+        .navbar {
+            background: var(--white);
+            border-bottom: 1.5px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 14px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: linear-gradient(155deg, var(--purple-500), var(--purple-800));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 14px -6px rgba(92, 36, 194, 0.5);
+            flex-shrink: 0;
+        }
+
+        .brand-name {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 17px;
+            color: var(--ink);
+        }
+
+        .nav-user {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 6px 14px 6px 8px;
+            border-radius: 30px;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--purple-500), var(--purple-700));
+            color: var(--white);
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-name {
+            font-size: 13.5px;
+            font-weight: 600;
+            color: var(--ink);
+        }
+
+        .badge-role {
+            font-size: 11.5px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: var(--purple-100);
+            color: var(--purple-700);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .btn-logout {
+            padding: 8px 18px;
+            border-radius: var(--radius-sm);
+            background: var(--surface);
+            border: 1.5px solid var(--border-strong);
+            color: var(--ink-soft);
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.15s ease;
+        }
+
+        .btn-logout:hover {
+            background: #FEE2E2;
+            border-color: #FCA5A5;
+            color: #991B1B;
+        }
+
+        /* ---------- Main Container ---------- */
+
+        .dashboard-layout {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 32px 28px 60px;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+
+        /* Hero Banner */
+
+        .hero-banner {
+            background: linear-gradient(135deg, #4A1D96 0%, #2E1268 100%);
+            border-radius: var(--radius-lg);
+            padding: 32px 36px;
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 16px 36px -12px rgba(46, 18, 104, 0.4);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .hero-banner::after {
+            content: "";
+            position: absolute;
+            right: -40px;
+            top: -60px;
+            width: 240px;
+            height: 240px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(183, 156, 240, 0.25) 0%, rgba(255, 255, 255, 0) 70%);
+            pointer-events: none;
+        }
+
+        .hero-content h1 {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: clamp(26px, 2.5vw, 32px);
+            letter-spacing: -0.01em;
+        }
+
+        .hero-content p {
+            margin-top: 6px;
+            font-size: 15px;
+            color: var(--purple-200);
+        }
+
+        .hero-badge {
+            background: rgba(255, 255, 255, 0.14);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .hero-badge::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4ADE80;
+        }
+
+        /* ---------- Dashboard Cards Grid ---------- */
+
+        .cards-grid-top {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 24px;
+        }
+
+        .cards-grid-mid {
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            gap: 24px;
+        }
+
+        .cards-grid-bottom {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--surface-card);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            box-shadow: var(--shadow-card);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 14px 34px -10px rgba(92, 36, 194, 0.12);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card-title-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: var(--purple-100);
+            color: var(--purple-700);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-title {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 16px;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            color: var(--ink);
+        }
+
+        .card-tag {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--ink-soft);
+        }
+
+        /* 1. Courses List */
+
+        .courses-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .course-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .course-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .course-name {
+            font-weight: 600;
+            font-size: 14.5px;
+            color: var(--ink);
+        }
+
+        .course-pct {
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--purple-700);
+        }
+
+        .progress-bar-bg {
+            height: 8px;
+            background: var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--purple-500), var(--purple-700));
+            border-radius: 10px;
+            transition: width 0.6s ease;
+        }
+
+        /* 2. Assignments List */
+
+        .assignments-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .assignment-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .assignment-info h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--ink);
+            margin: 0 0 4px 0;
+        }
+
+        .assignment-due {
+            font-size: 12.5px;
+            color: var(--ink-soft);
+        }
+
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+            letter-spacing: 0.02em;
+        }
+
+        .status-pending {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .status-inprogress {
+            background: #E0E7FF;
+            color: #3730A3;
+        }
+
+        .status-completed {
+            background: #DCFCE7;
+            color: #166534;
+        }
+
+        /* 3. Attendance Section */
+
+        .attendance-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            gap: 20px;
+            padding: 8px 0;
+        }
+
+        .attendance-circle-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .attendance-circle {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            background: conic-gradient(var(--purple-600) calc(var(--pct) * 1%), var(--purple-100) 0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .attendance-circle::before {
+            content: "";
+            position: absolute;
+            width: 82px;
+            height: 82px;
+            border-radius: 50%;
+            background: var(--white);
+        }
+
+        .attendance-circle-text {
+            position: relative;
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 24px;
+            color: var(--purple-900);
+        }
+
+        .attendance-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex: 1;
+            max-width: 200px;
+        }
+
+        .attendance-stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13.5px;
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            background: var(--surface);
+            border: 1px solid var(--border);
+        }
+
+        .attendance-stat-label {
+            color: var(--ink-soft);
+            font-weight: 500;
+        }
+
+        .attendance-stat-val {
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        /* 4. Academic Progress Section */
+
+        .academic-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .academic-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .subject-score-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            text-align: center;
+        }
+
+        .subject-name {
+            font-size: 12px;
+            color: var(--ink-soft);
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .subject-pct {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 20px;
+            color: var(--purple-700);
+        }
+
+        .overall-average-card {
+            background: linear-gradient(135deg, var(--purple-100), #F3EEFF);
+            border: 1.5px solid var(--purple-200);
+            border-radius: var(--radius-sm);
+            padding: 14px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .overall-label {
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--purple-900);
+        }
+
+        .overall-val {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 22px;
+            color: var(--purple-700);
+        }
+
+        /* 5. Upcoming Schedule */
+
+        .schedule-list {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .schedule-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            transition: transform 0.15s ease;
+        }
+
+        .schedule-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--purple-300);
+        }
+
+        .schedule-date-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--purple-100);
+            color: var(--purple-700);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            width: fit-content;
+        }
+
+        .schedule-title {
+            font-weight: 700;
+            font-size: 15px;
+            color: var(--ink);
+        }
+
+        .schedule-time {
+            font-size: 13px;
+            color: var(--ink-soft);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* ---------- Responsive ---------- */
+
+        @media (max-width: 980px) {
+            .cards-grid-top,
+            .cards-grid-mid {
+                grid-template-columns: 1fr;
+            }
+
+            .academic-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .schedule-list {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-banner {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .dashboard-layout {
+                padding: 20px 16px 40px;
+            }
+
+            .nav-container {
+                padding: 12px 16px;
+            }
+
+            .user-name {
+                display: none;
+            }
+
+            .attendance-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- TOP NAVBAR -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="brand">
+                <div class="logo" aria-hidden="true">
+                    <svg viewBox="0 0 40 40" width="20" height="20">
+                        <path
+                            d="M28.5 12.2c-1.6-2-4.4-3.3-8-3.3-5.6 0-9.3 2.8-9.3 6.9 0 3.6 2.6 5.3 7.6 6.4l3 .6c3 .6 4.3 1.5 4.3 3.2 0 2-1.9 3.2-4.9 3.2-3.3 0-5.6-1.2-6.9-3.6l-4 2c1.8 3.5 5.6 5.5 10.7 5.5 6 0 9.9-2.9 9.9-7.4 0-3.7-2.4-5.6-7.6-6.7l-3-.6c-3-.6-4.3-1.4-4.3-3 0-1.8 1.8-2.9 4.5-2.9 2.8 0 4.9 1.1 6.1 3.1l3.9-2.4z"
+                            fill="white" />
+                    </svg>
+                </div>
+                <span class="brand-name">Stampready</span>
+            </div>
+
+            <div class="nav-user">
+                <div class="user-profile">
+                    <div class="user-avatar" id="nav-avatar">S</div>
+                    <span class="user-name" id="nav-username">Student</span>
+                    <span class="badge-role">Student</span>
+                </div>
+                <button type="button" class="btn-logout" id="btn-logout">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- DASHBOARD MAIN LAYOUT -->
+    <main class="dashboard-layout">
+
+        <!-- GREETING HERO BANNER -->
+        <section class="hero-banner">
+            <div class="hero-content">
+                <h1 id="greeting-title">Hi student!</h1>
+                <p id="greeting-subtitle">Welcome back, Student.</p>
+            </div>
+            <div class="hero-badge">
+                <span>Semester 2 • Active</span>
+            </div>
+        </section>
+
+        <!-- TOP GRID: 1. My Courses & 2. Assignments -->
+        <div class="cards-grid-top">
+
+            <!-- SECTION 1: MY COURSES -->
+            <section class="card">
+                <div class="card-header">
+                    <div class="card-title-group">
+                        <div class="card-icon" aria-hidden="true">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                        </div>
+                        <h2 class="card-title">MY COURSES</h2>
+                    </div>
+                    <span class="card-tag">3 Enrolled</span>
+                </div>
+
+                <div class="courses-list" id="courses-list">
+                    <!-- Populated dynamically -->
+                </div>
+            </section>
+
+            <!-- SECTION 2: ASSIGNMENTS -->
+            <section class="card">
+                <div class="card-header">
+                    <div class="card-title-group">
+                        <div class="card-icon" aria-hidden="true">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                        </div>
+                        <h2 class="card-title">ASSIGNMENTS</h2>
+                    </div>
+                    <span class="card-tag">3 Tasks</span>
+                </div>
+
+                <div class="assignments-list" id="assignments-list">
+                    <!-- Populated dynamically -->
+                </div>
+            </section>
+
+        </div>
+
+        <!-- MID GRID: 3. Attendance & 4. Academic Progress -->
+        <div class="cards-grid-mid">
+
+            <!-- SECTION 3: ATTENDANCE -->
+            <section class="card">
+                <div class="card-header">
+                    <div class="card-title-group">
+                        <div class="card-icon" aria-hidden="true">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                        </div>
+                        <h2 class="card-title">ATTENDANCE</h2>
+                    </div>
+                    <span class="card-tag">Overall</span>
+                </div>
+
+                <div class="attendance-container">
+                    <div class="attendance-circle-wrap">
+                        <div class="attendance-circle" id="attendance-circle" style="--pct: 92;">
+                            <span class="attendance-circle-text" id="attendance-pct">92%</span>
+                        </div>
+                        <span style="font-size: 12px; color: var(--ink-soft); font-weight: 600;">Overall Attendance</span>
+                    </div>
+
+                    <div class="attendance-stats">
+                        <div class="attendance-stat-row">
+                            <span class="attendance-stat-label">Present</span>
+                            <span class="attendance-stat-val" id="attendance-present" style="color: #16A34A;">46</span>
+                        </div>
+                        <div class="attendance-stat-row">
+                            <span class="attendance-stat-label">Absent</span>
+                            <span class="attendance-stat-val" id="attendance-absent" style="color: #DC2626;">4</span>
+                        </div>
+                        <div class="attendance-stat-row">
+                            <span class="attendance-stat-label">Late</span>
+                            <span class="attendance-stat-val" id="attendance-late" style="color: #D97706;">2</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 4: ACADEMIC PROGRESS -->
+            <section class="card">
+                <div class="card-header">
+                    <div class="card-title-group">
+                        <div class="card-icon" aria-hidden="true">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                        </div>
+                        <h2 class="card-title">ACADEMIC PROGRESS</h2>
+                    </div>
+                    <span class="card-tag">Current Term</span>
+                </div>
+
+                <div class="academic-container">
+                    <div class="academic-grid" id="academic-grid">
+                        <!-- Populated dynamically -->
+                    </div>
+
+                    <div class="overall-average-card">
+                        <span class="overall-label">Overall Average</span>
+                        <span class="overall-val" id="overall-average">85.5%</span>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- BOTTOM GRID: 5. Upcoming Schedule -->
+        <div class="cards-grid-bottom">
+
+            <!-- SECTION 5: UPCOMING SCHEDULE -->
+            <section class="card">
+                <div class="card-header">
+                    <div class="card-title-group">
+                        <div class="card-icon" aria-hidden="true">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                        </div>
+                        <h2 class="card-title">UPCOMING SCHEDULE</h2>
+                    </div>
+                    <span class="card-tag">This Week</span>
+                </div>
+
+                <div class="schedule-list" id="schedule-list">
+                    <!-- Populated dynamically -->
+                </div>
+            </section>
+
+        </div>
+
+    </main>
+
+    <!-- ============================================================
+       Student Dashboard Frontend Script & Auth Guard
+       ============================================================ -->
+    <script>
+        (function () {
+            'use strict';
+
+            const STORAGE_KEY_CURRENT_USER = 'stampready_current_user';
+
+            // Student Dashboard Demo Data
+            const studentDashboardData = {
+                courses: [
+                    { name: 'Mathematics', progress: 78 },
+                    { name: 'Science', progress: 65 },
+                    { name: 'Computer Science', progress: 92 }
+                ],
+                assignments: [
+                    { title: 'Mathematics Assignment', due: 'Due: Aug 28', status: 'Pending', statusClass: 'status-pending' },
+                    { title: 'Science Project', due: 'Due: Aug 30', status: 'In Progress', statusClass: 'status-inprogress' },
+                    { title: 'Computer Science Quiz', due: 'Due: Sep 2', status: 'Completed', statusClass: 'status-completed' }
+                ],
+                attendance: {
+                    overall: 92,
+                    present: 46,
+                    absent: 4,
+                    late: 2
+                },
+                academicProgress: [
+                    { subject: 'Mathematics', score: '85%' },
+                    { subject: 'Science', score: '78%' },
+                    { subject: 'Computer Sci.', score: '91%' },
+                    { subject: 'English', score: '88%' }
+                ],
+                overallAverage: '85.5%',
+                schedule: [
+                    { date: 'Aug 26', subject: 'Mathematics Class', time: '10:00 AM' },
+                    { date: 'Aug 27', subject: 'Science Lab', time: '11:30 AM' },
+                    { date: 'Aug 29', subject: 'Computer Science', time: '2:00 PM' }
+                ]
+            };
+
+            /**
+             * Retrieve current user session.
+             */
+            function getCurrentUser() {
+                try {
+                    const sessionData = sessionStorage.getItem(STORAGE_KEY_CURRENT_USER);
+                    if (sessionData) return JSON.parse(sessionData);
+                    const localData = localStorage.getItem(STORAGE_KEY_CURRENT_USER);
+                    if (localData) return JSON.parse(localData);
+                } catch (e) {
+                    console.error('Error reading current user session:', e);
+                }
+                return null;
+            }
+
+            /**
+             * Logout handler.
+             */
+            function logout() {
+                try {
+                    localStorage.removeItem(STORAGE_KEY_CURRENT_USER);
+                    sessionStorage.removeItem(STORAGE_KEY_CURRENT_USER);
+                } catch (e) {
+                    console.error('Error logging out:', e);
+                }
+                window.location.href = 'index.html';
+            }
+
+            /**
+             * Populate all five student dashboard sections.
+             */
+            function renderDashboardData() {
+                // 1. Courses
+                const coursesContainer = document.getElementById('courses-list');
+                coursesContainer.innerHTML = studentDashboardData.courses.map(course => `
+                    <div class="course-item">
+                        <div class="course-top">
+                            <span class="course-name">${course.name}</span>
+                            <span class="course-pct">${course.progress}%</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" style="width: ${course.progress}%;"></div>
+                        </div>
+                    </div>
+                `).join('');
+
+                // 2. Assignments
+                const assignmentsContainer = document.getElementById('assignments-list');
+                assignmentsContainer.innerHTML = studentDashboardData.assignments.map(item => `
+                    <div class="assignment-item">
+                        <div class="assignment-info">
+                            <h4>${item.title}</h4>
+                            <span class="assignment-due">${item.due}</span>
+                        </div>
+                        <span class="status-badge ${item.statusClass}">${item.status}</span>
+                    </div>
+                `).join('');
+
+                // 3. Attendance
+                document.getElementById('attendance-circle').style.setProperty('--pct', studentDashboardData.attendance.overall);
+                document.getElementById('attendance-pct').textContent = `${studentDashboardData.attendance.overall}%`;
+                document.getElementById('attendance-present').textContent = studentDashboardData.attendance.present;
+                document.getElementById('attendance-absent').textContent = studentDashboardData.attendance.absent;
+                document.getElementById('attendance-late').textContent = studentDashboardData.attendance.late;
+
+                // 4. Academic Progress
+                const academicGrid = document.getElementById('academic-grid');
+                academicGrid.innerHTML = studentDashboardData.academicProgress.map(item => `
+                    <div class="subject-score-card">
+                        <div class="subject-name">${item.subject}</div>
+                        <div class="subject-pct">${item.score}</div>
+                    </div>
+                `).join('');
+                document.getElementById('overall-average').textContent = studentDashboardData.overallAverage;
+
+                // 5. Upcoming Schedule
+                const scheduleContainer = document.getElementById('schedule-list');
+                scheduleContainer.innerHTML = studentDashboardData.schedule.map(item => `
+                    <div class="schedule-card">
+                        <span class="schedule-date-badge">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line></svg>
+                            ${item.date}
+                        </span>
+                        <div class="schedule-title">${item.subject}</div>
+                        <div class="schedule-time">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            ${item.time}
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            /**
+             * Authentication Guard & Page Initialization.
+             */
+            function init() {
+                const currentUser = getCurrentUser();
+
+                // 1. Unauthenticated -> Redirect to Login
+                if (!currentUser) {
+                    window.location.replace('index.html');
+                    return;
+                }
+
+                // 2. Parent Role -> Redirect to Parent Dashboard
+                if (currentUser.role === 'parent') {
+                    window.location.replace('parent-dashboard.html');
+                    return;
+                }
+
+                // 3. Other/Invalid Role -> Redirect to Login
+                if (currentUser.role !== 'student') {
+                    logout();
+                    return;
+                }
+
+                // Populate Dynamic User Information
+                const fullName = currentUser.fullName || 'Student';
+                document.getElementById('greeting-title').textContent = 'Hi student!';
+                document.getElementById('greeting-subtitle').textContent = `Welcome back, ${fullName}.`;
+                document.getElementById('nav-username').textContent = fullName;
+
+                const initials = fullName.trim().split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+                document.getElementById('nav-avatar').textContent = initials || 'S';
+
+                // Render Dashboard Information
+                renderDashboardData();
+
+                // Setup Logout Button
+                document.getElementById('btn-logout').addEventListener('click', logout);
+            }
+
+            // Expose for testing
+            window.StudentDashboard = {
+                getCurrentUser,
+                logout,
+                studentDashboardData,
+                init
+            };
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+        })();
+    </script>
+</body>
+
+</html>
