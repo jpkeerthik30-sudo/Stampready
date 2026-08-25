@@ -618,6 +618,22 @@
                 align-items: flex-start;
             }
         }
+
+        /* ---- Mentor Fields Group ---- */
+        .mentor-field-divider {
+            padding-bottom: 0;
+        }
+        .mentor-fields-label {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--purple-700);
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            background: var(--purple-100);
+            border: 1px solid var(--purple-200);
+        }
     </style>
 </head>
 
@@ -710,7 +726,27 @@
                                 <option value="" disabled selected>Select Role</option>
                                 <option value="student">Student</option>
                                 <option value="parent">Parent</option>
+                                <option value="mentor">Mentor</option>
                             </select>
+                        </div>
+
+                        <!-- Mentor-specific fields (shown only when Mentor role is selected) -->
+                        <div id="mentor-fields-group" style="display:none; flex-direction:column; gap:15px;">
+                            <div class="field mentor-field-divider">
+                                <div class="mentor-fields-label">Mentor Information</div>
+                            </div>
+                            <div class="field">
+                                <label for="reg-mentor-id">Mentor ID</label>
+                                <input type="text" id="reg-mentor-id" name="mentorId" placeholder="MNT-1001" autocomplete="off">
+                            </div>
+                            <div class="field">
+                                <label for="reg-specialization">Specialization</label>
+                                <input type="text" id="reg-specialization" name="specialization" placeholder="Computer Science" autocomplete="off">
+                            </div>
+                            <div class="field">
+                                <label for="reg-experience">Experience</label>
+                                <input type="text" id="reg-experience" name="experience" placeholder="5 Years" autocomplete="off">
+                            </div>
                         </div>
 
                         <div class="field">
@@ -894,7 +930,7 @@
             const STORAGE_KEY_CURRENT_USER = 'stampready_current_user';
 
             // Valid roles
-            const VALID_ROLES = ['student', 'parent'];
+            const VALID_ROLES = ['student', 'parent', 'mentor'];
 
             // DOM Elements
             const loginView = document.getElementById('login-view');
@@ -996,6 +1032,13 @@
                     loggedInAt: new Date().toISOString()
                 };
 
+                // Safely include mentor-specific fields for mentor accounts
+                if (user.role === 'mentor') {
+                    if (user.mentorId) sessionUser.mentorId = user.mentorId;
+                    if (user.specialization) sessionUser.specialization = user.specialization;
+                    if (user.experience) sessionUser.experience = user.experience;
+                }
+
                 try {
                     if (rememberMe) {
                         localStorage.setItem(STORAGE_KEY_CURRENT_USER, JSON.stringify(sessionUser));
@@ -1051,7 +1094,13 @@
                     window.location.href = 'student-dashboard.html';
                 } else if (role === 'parent') {
                     window.location.href = 'parent-dashboard.html';
+                } else if (role === 'mentor') {
+                    window.location.href = 'mentor-dashboard.html';
                 }
+            }
+
+            function redirectToCorrectDashboard(role) {
+                redirectToDashboard(role);
             }
 
             // ============================================================
@@ -1124,6 +1173,35 @@
              * Handle user registration with role selection.
              * @param {Event} e
              */
+            // DOM references for mentor-specific fields
+            const mentorFieldsGroup = document.getElementById('mentor-fields-group');
+            const regMentorIdInput = document.getElementById('reg-mentor-id');
+            const regSpecializationInput = document.getElementById('reg-specialization');
+            const regExperienceInput = document.getElementById('reg-experience');
+
+            /**
+             * Show/hide mentor-specific fields based on selected role.
+             */
+            function handleRoleChange() {
+                const selectedRole = regRoleSelect.value;
+                if (selectedRole === 'mentor') {
+                    mentorFieldsGroup.style.display = 'flex';
+                    regMentorIdInput.setAttribute('required', 'required');
+                    regSpecializationInput.setAttribute('required', 'required');
+                    regExperienceInput.setAttribute('required', 'required');
+                } else {
+                    mentorFieldsGroup.style.display = 'none';
+                    regMentorIdInput.removeAttribute('required');
+                    regSpecializationInput.removeAttribute('required');
+                    regExperienceInput.removeAttribute('required');
+                    regMentorIdInput.value = '';
+                    regSpecializationInput.value = '';
+                    regExperienceInput.value = '';
+                }
+            }
+
+            regRoleSelect.addEventListener('change', handleRoleChange);
+
             function registerUser(e) {
                 if (e) e.preventDefault();
                 clearMessage('register');
@@ -1157,9 +1235,32 @@
 
                 // 3. Validate role
                 if (!role || !VALID_ROLES.includes(role)) {
-                    showMessage('register', 'Please select a role (Student or Parent).', 'error');
+                    showMessage('register', 'Please select a role (Student, Parent, or Mentor).', 'error');
                     regRoleSelect.focus();
                     return;
+                }
+
+                // 3b. Validate mentor-specific fields if role is mentor
+                if (role === 'mentor') {
+                    const mentorId = regMentorIdInput.value.trim();
+                    const specialization = regSpecializationInput.value.trim();
+                    const experience = regExperienceInput.value.trim();
+
+                    if (!mentorId) {
+                        showMessage('register', 'Please enter your Mentor ID (e.g. MNT-1001).', 'error');
+                        regMentorIdInput.focus();
+                        return;
+                    }
+                    if (!specialization) {
+                        showMessage('register', 'Please enter your specialization (e.g. Computer Science).', 'error');
+                        regSpecializationInput.focus();
+                        return;
+                    }
+                    if (!experience) {
+                        showMessage('register', 'Please enter your experience (e.g. 5 Years).', 'error');
+                        regExperienceInput.focus();
+                        return;
+                    }
                 }
 
                 // 4. Validate passwords
@@ -1201,11 +1302,19 @@
                     createdAt: new Date().toISOString()
                 };
 
+                // Store mentor-specific fields for mentor accounts
+                if (role === 'mentor') {
+                    newUser.mentorId = regMentorIdInput.value.trim();
+                    newUser.specialization = regSpecializationInput.value.trim();
+                    newUser.experience = regExperienceInput.value.trim();
+                }
+
                 users.push(newUser);
                 saveUsers(users);
 
-                // 7. Reset form, switch to login view and show success message
+                // 7. Reset form, hide mentor fields, switch to login view and show success message
                 registerForm.reset();
+                mentorFieldsGroup.style.display = 'none';
                 showLogin();
                 loginEmailInput.value = email;
                 loginPasswordInput.value = '';
@@ -1302,7 +1411,8 @@
                 });
             });
 
-            [regFullnameInput, regEmailInput, regRoleSelect, regPasswordInput, regConfirmPasswordInput].forEach(input => {
+            [regFullnameInput, regEmailInput, regRoleSelect, regPasswordInput, regConfirmPasswordInput,
+             regMentorIdInput, regSpecializationInput, regExperienceInput].forEach(input => {
                 input.addEventListener('input', () => {
                     if (registerAlert.classList.contains('form-alert-error')) {
                         clearMessage('register');
@@ -1343,6 +1453,7 @@
                 showLogin,
                 showRegister,
                 redirectToDashboard,
+                redirectToCorrectDashboard,
                 showMessage
             };
 

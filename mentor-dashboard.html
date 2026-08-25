@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stampready Vault — Mentor Dashboard</title>
+    <meta name="description" content="Stampready Vault Mentor Dashboard — manage your assigned students and parents, track sessions and progress.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --purple-100: #EDE6FB;
+            --purple-200: #D9C9F7;
+            --purple-300: #B79CF0;
+            --purple-400: #9D7BEA;
+            --purple-500: #8358E0;
+            --purple-600: #6C36D6;
+            --purple-700: #5A24C2;
+            --purple-800: #431A93;
+            --purple-900: #2E1268;
+
+            --teal-100: #CCFBF1;
+            --teal-600: #0D9488;
+            --teal-700: #0F766E;
+
+            --ink: #211A33;
+            --ink-soft: #6E6885;
+            --ink-faint: #A7A1BC;
+
+            --white: #FFFFFF;
+            --surface: #FBFAFD;
+            --surface-card: #FFFFFF;
+            --border: #E7E2F2;
+            --border-strong: #D6CEEC;
+
+            --font-display: 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
+            --font-body: 'Inter', 'Segoe UI', sans-serif;
+
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 20px;
+
+            --shadow-card: 0 10px 30px -10px rgba(92, 36, 194, 0.08), 0 2px 8px -2px rgba(33, 26, 51, 0.04);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: var(--font-body);
+            color: var(--ink);
+            background: #F8F6FC;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3, h4, h5, p { margin: 0; }
+        a { color: inherit; text-decoration: none; }
+        button { font: inherit; border: none; cursor: pointer; }
+
+        /* Navbar */
+        .navbar { background: var(--white); border-bottom: 1.5px solid var(--border); position: sticky; top: 0; z-index: 100; }
+        .nav-container { max-width: 1240px; margin: 0 auto; padding: 14px 28px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+        .brand { display: flex; align-items: center; gap: 12px; }
+        .logo { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(155deg, var(--purple-500), var(--purple-800)); display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 14px -6px rgba(92,36,194,0.5); flex-shrink: 0; }
+        .brand-name { font-family: var(--font-display); font-weight: 700; font-size: 17px; color: var(--ink); }
+        .nav-user { display: flex; align-items: center; gap: 16px; }
+        .user-profile { display: flex; align-items: center; gap: 10px; background: var(--surface); border: 1px solid var(--border); padding: 6px 14px 6px 8px; border-radius: 30px; }
+        .user-avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--purple-500), var(--purple-700)); color: var(--white); font-family: var(--font-display); font-weight: 700; font-size: 13px; display: flex; align-items: center; justify-content: center; }
+        .user-name { font-size: 13.5px; font-weight: 600; color: var(--ink); }
+        .badge-role { font-size: 11.5px; font-weight: 700; padding: 3px 8px; border-radius: 12px; background: var(--purple-100); color: var(--purple-700); text-transform: uppercase; letter-spacing: 0.04em; }
+        .btn-logout { padding: 8px 18px; border-radius: var(--radius-sm); background: var(--surface); border: 1.5px solid var(--border-strong); color: var(--ink-soft); font-size: 13px; font-weight: 600; transition: all 0.15s ease; }
+        .btn-logout:hover { background: #FEE2E2; border-color: #FCA5A5; color: #991B1B; }
+
+        /* Layout */
+        .dashboard-layout { max-width: 1240px; margin: 0 auto; padding: 32px 28px 60px; display: flex; flex-direction: column; gap: 28px; }
+
+        /* Hero */
+        .hero-banner { background: linear-gradient(135deg, #3B0A8F 0%, #2E1268 100%); border-radius: var(--radius-lg); padding: 32px 36px; color: var(--white); position: relative; overflow: hidden; box-shadow: 0 16px 36px -12px rgba(46,18,104,0.45); display: flex; justify-content: space-between; align-items: center; }
+        .hero-banner::after { content: ""; position: absolute; right: -40px; top: -60px; width: 240px; height: 240px; border-radius: 50%; background: radial-gradient(circle, rgba(183,156,240,0.22) 0%, transparent 70%); pointer-events: none; }
+        .hero-content h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(26px, 2.5vw, 32px); letter-spacing: -0.01em; }
+        .hero-content p { margin-top: 6px; font-size: 15px; color: var(--purple-200); }
+        .hero-badge { background: rgba(255,255,255,0.14); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 30px; font-size: 13px; font-weight: 600; color: var(--white); display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+        .hero-badge::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #4ADE80; flex-shrink: 0; }
+
+        /* Cards */
+        .card { background: var(--surface-card); border: 1.5px solid var(--border); border-radius: var(--radius-md); padding: 24px; box-shadow: var(--shadow-card); display: flex; flex-direction: column; transition: box-shadow 0.15s ease; }
+        .card:hover { box-shadow: 0 14px 34px -10px rgba(92,36,194,0.12); }
+        .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+        .card-title-group { display: flex; align-items: center; gap: 10px; }
+        .card-icon { width: 32px; height: 32px; border-radius: 8px; background: var(--purple-100); color: var(--purple-700); display: flex; align-items: center; justify-content: center; }
+        .card-title { font-family: var(--font-display); font-weight: 700; font-size: 16px; letter-spacing: 0.02em; text-transform: uppercase; color: var(--ink); }
+        .card-tag { font-size: 12px; font-weight: 600; color: var(--ink-soft); }
+
+        /* Grid layouts */
+        .cards-grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+        /* Mentor Profile */
+        .mentor-profile-box { display: flex; align-items: center; gap: 16px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 18px; }
+        .mentor-avatar-large { width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, var(--purple-500), var(--purple-700)); color: var(--white); font-family: var(--font-display); font-weight: 700; font-size: 19px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px -2px rgba(92,36,194,0.3); flex-shrink: 0; }
+        .mentor-title-info { flex: 1; }
+        .mentor-title-info h3 { font-family: var(--font-display); font-size: 17px; font-weight: 700; color: var(--ink); }
+        .mentor-title-info p { font-size: 13px; color: var(--ink-soft); margin-top: 2px; }
+        .status-pill { display: inline-flex; align-items: center; gap: 6px; background: #DCFCE7; color: #166534; padding: 4px 10px; border-radius: 20px; font-size: 11.5px; font-weight: 700; letter-spacing: 0.02em; flex-shrink: 0; }
+        .status-pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: #16A34A; }
+        .status-pill-warn { background: #FEF3C7; color: #92400E; }
+        .status-pill-warn::before { background: #D97706; }
+        .details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .detail-cell { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; display: flex; flex-direction: column; gap: 3px; }
+        .detail-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-faint); font-weight: 600; }
+        .detail-value { font-size: 14px; font-weight: 700; color: var(--ink); }
+
+        /* Students */
+        .students-list { display: flex; flex-direction: column; gap: 14px; }
+        .student-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; display: flex; flex-direction: column; gap: 12px; transition: transform 0.15s ease, border-color 0.15s ease; }
+        .student-card:hover { transform: translateY(-2px); border-color: var(--purple-300); }
+        .student-card-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+        .student-ident { display: flex; align-items: center; gap: 12px; }
+        .student-avatar { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, var(--purple-200), var(--purple-300)); color: var(--purple-800); font-family: var(--font-display); font-weight: 700; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .student-name-group h4 { font-size: 15px; font-weight: 700; color: var(--ink); margin: 0; }
+        .student-class-meta { font-size: 12.5px; color: var(--ink-soft); margin-top: 2px; }
+        .student-id-tag { font-size: 11px; color: var(--ink-faint); font-family: monospace; margin-top: 1px; }
+        .student-metrics-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding-top: 10px; border-top: 1px dashed var(--border); }
+        .metric-box { display: flex; flex-direction: column; gap: 2px; }
+        .metric-title { font-size: 11px; color: var(--ink-soft); font-weight: 500; }
+        .metric-score { font-size: 15px; font-weight: 700; color: var(--purple-700); }
+        .metric-score-green { color: #16A34A; }
+
+        /* Parents */
+        .parents-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        .parent-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; display: flex; flex-direction: column; gap: 14px; transition: transform 0.15s ease, border-color 0.15s ease; }
+        .parent-card:hover { transform: translateY(-2px); border-color: var(--teal-600); }
+        .parent-card-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+        .parent-ident { display: flex; align-items: center; gap: 12px; }
+        .parent-avatar { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, var(--teal-100), #99F6E4); color: var(--teal-700); font-family: var(--font-display); font-weight: 700; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .parent-name-group h4 { font-size: 15px; font-weight: 700; color: var(--ink); margin: 0; }
+        .parent-sub { font-size: 12.5px; color: var(--ink-soft); margin-top: 2px; }
+        .parent-id-tag { font-size: 11px; color: var(--ink-faint); font-family: monospace; margin-top: 1px; }
+        .parent-details-list { display: flex; flex-direction: column; gap: 7px; padding-top: 10px; border-top: 1px dashed var(--border); }
+        .parent-detail-row { display: flex; justify-content: space-between; align-items: flex-start; font-size: 13px; gap: 6px; }
+        .parent-detail-key { color: var(--ink-soft); font-weight: 500; white-space: nowrap; }
+        .parent-detail-val { color: var(--ink); font-weight: 600; text-align: right; }
+
+        /* Sessions */
+        .sessions-list { display: flex; flex-direction: column; gap: 14px; }
+        .session-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; display: flex; align-items: center; justify-content: space-between; gap: 14px; transition: transform 0.15s ease, border-color 0.15s ease; }
+        .session-card:hover { transform: translateY(-2px); border-color: var(--purple-300); }
+        .session-left-meta { display: flex; align-items: center; gap: 14px; }
+        .session-date-tag { background: var(--purple-100); color: var(--purple-700); padding: 8px 12px; border-radius: 10px; font-size: 12px; font-weight: 700; text-align: center; min-width: 80px; display: flex; flex-direction: column; gap: 2px; flex-shrink: 0; }
+        .session-date-day { font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; }
+        .session-date-hour { font-size: 13px; color: var(--purple-900); }
+        .session-details-group h4 { font-size: 14.5px; font-weight: 700; color: var(--ink); margin: 0; }
+        .session-subject-tag { font-size: 12.5px; color: var(--ink-soft); margin-top: 3px; }
+        .session-badge-pill { background: var(--white); border: 1px solid var(--purple-200); color: var(--purple-700); padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; white-space: nowrap; }
+
+        /* Progress */
+        .progress-list { display: flex; flex-direction: column; gap: 16px; }
+        .progress-student-block { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+        .progress-student-name { font-size: 14.5px; font-weight: 700; color: var(--ink); display: flex; align-items: center; justify-content: space-between; }
+        .progress-bars-group { display: flex; flex-direction: column; gap: 10px; }
+        .subject-progress-row { display: flex; flex-direction: column; gap: 5px; }
+        .subject-row-meta { display: flex; justify-content: space-between; align-items: center; font-size: 12.5px; }
+        .subject-lbl { color: var(--ink); font-weight: 600; }
+        .subject-val { color: var(--purple-700); font-weight: 700; }
+        .progress-track { height: 7px; background: var(--border); border-radius: 10px; overflow: hidden; }
+        .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--purple-500), var(--purple-700)); border-radius: 10px; transition: width 0.6s ease; }
+
+        /* Responsive */
+        @media (max-width: 980px) {
+            .cards-grid-2col { grid-template-columns: 1fr; }
+            .parents-grid { grid-template-columns: 1fr 1fr; }
+            .hero-banner { flex-direction: column; align-items: flex-start; gap: 16px; }
+        }
+        @media (max-width: 700px) {
+            .details-grid { grid-template-columns: 1fr; }
+            .parents-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 600px) {
+            .dashboard-layout { padding: 20px 16px 40px; }
+            .nav-container { padding: 12px 16px; }
+            .user-name { display: none; }
+            .session-card { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- TOP NAVBAR -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="brand">
+                <div class="logo" aria-hidden="true">
+                    <svg viewBox="0 0 40 40" width="20" height="20">
+                        <path d="M28.5 12.2c-1.6-2-4.4-3.3-8-3.3-5.6 0-9.3 2.8-9.3 6.9 0 3.6 2.6 5.3 7.6 6.4l3 .6c3 .6 4.3 1.5 4.3 3.2 0 2-1.9 3.2-4.9 3.2-3.3 0-5.6-1.2-6.9-3.6l-4 2c1.8 3.5 5.6 5.5 10.7 5.5 6 0 9.9-2.9 9.9-7.4 0-3.7-2.4-5.6-7.6-6.7l-3-.6c-3-.6-4.3-1.4-4.3-3 0-1.8 1.8-2.9 4.5-2.9 2.8 0 4.9 1.1 6.1 3.1l3.9-2.4z" fill="white"/>
+                    </svg>
+                </div>
+                <span class="brand-name">Stampready</span>
+            </div>
+            <div class="nav-user">
+                <div class="user-profile">
+                    <div class="user-avatar" id="nav-avatar">RK</div>
+                    <span class="user-name" id="nav-username">Rahul Kumar</span>
+                    <span class="badge-role">Mentor</span>
+                </div>
+                <button type="button" class="btn-logout" id="btn-logout">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- DASHBOARD MAIN -->
+    <main class="dashboard-layout">
+
+        <!-- HERO BANNER -->
+        <section class="hero-banner">
+            <div class="hero-content">
+                <h1 id="greeting-title">Hi mentor!</h1>
+                <p id="greeting-subtitle">Welcome back, Rahul.</p>
+            </div>
+            <div class="hero-badge">Faculty Portal &bull; Active</div>
+        </section>
+
+        <!-- MENTOR PROFILE (full width) -->
+        <section class="card">
+            <div class="card-header">
+                <div class="card-title-group">
+                    <div class="card-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    </div>
+                    <h2 class="card-title">MENTOR PROFILE</h2>
+                </div>
+                <span class="card-tag" id="profile-mentor-id-tag">Faculty ID</span>
+            </div>
+            <div class="mentor-profile-box">
+                <div class="mentor-avatar-large" id="profile-avatar">RK</div>
+                <div class="mentor-title-info">
+                    <h3 id="profile-name">Rahul Kumar</h3>
+                    <p id="profile-specialization-sub">Computer Science Mentor</p>
+                </div>
+                <span class="status-pill" id="profile-status">Active</span>
+            </div>
+            <div class="details-grid">
+                <div class="detail-cell">
+                    <span class="detail-label">Full Name</span>
+                    <span class="detail-value" id="profile-fullname">Rahul Kumar</span>
+                </div>
+                <div class="detail-cell">
+                    <span class="detail-label">Mentor ID</span>
+                    <span class="detail-value" id="profile-mentor-id" style="font-family: monospace;">MNT-1001</span>
+                </div>
+                <div class="detail-cell">
+                    <span class="detail-label">Specialization</span>
+                    <span class="detail-value" id="profile-specialization">Computer Science</span>
+                </div>
+                <div class="detail-cell">
+                    <span class="detail-label">Experience</span>
+                    <span class="detail-value" id="profile-experience">5 Years</span>
+                </div>
+                <div class="detail-cell" style="grid-column: span 2;">
+                    <span class="detail-label">Students Currently Mentored</span>
+                    <span class="detail-value" id="profile-students-count">3</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- MY STUDENTS + STUDENT PROGRESS (2 col) -->
+        <div class="cards-grid-2col">
+
+            <!-- MY STUDENTS -->
+            <section class="card">
+                <div class="card-header">
+                    <div class="card-title-group">
+                        <div class="card-icon" aria-hidden="true">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        </div>
+                        <h2 class="card-title">MY STUDENTS</h2>
+                    </div>
+                    <span class="card-tag" id="students-badge-count">3 Assigned</span>
+                </div>
+                <div class="students-list" id="students-list"><!-- JS --></div>
+            </section>
+
+            <!-- STUDENT PROGRESS -->
+            <section class="card">
+                <div class="card-header">
+                    <div class="card-title-group">
+                        <div class="card-icon" aria-hidden="true">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                        </div>
+                        <h2 class="card-title">STUDENT PROGRESS</h2>
+                    </div>
+                    <span class="card-tag">Subject Mastery</span>
+                </div>
+                <div class="progress-list" id="progress-list"><!-- JS --></div>
+            </section>
+
+        </div>
+
+        <!-- MY PARENTS (full width) -->
+        <section class="card">
+            <div class="card-header">
+                <div class="card-title-group">
+                    <div class="card-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    </div>
+                    <h2 class="card-title">MY PARENTS</h2>
+                </div>
+                <span class="card-tag" id="parents-badge-count">3 Connected</span>
+            </div>
+            <div class="parents-grid" id="parents-grid"><!-- JS --></div>
+        </section>
+
+        <!-- UPCOMING MENTOR SESSIONS (full width) -->
+        <section class="card">
+            <div class="card-header">
+                <div class="card-title-group">
+                    <div class="card-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    </div>
+                    <h2 class="card-title">UPCOMING MENTOR SESSIONS</h2>
+                </div>
+                <span class="card-tag">Mentorship Schedule</span>
+            </div>
+            <div class="sessions-list" id="sessions-list"><!-- JS --></div>
+        </section>
+
+    </main>
+
+    <script>
+        (function () {
+            'use strict';
+
+            const STORAGE_KEY_CURRENT_USER = 'stampready_current_user';
+
+            /* ---- Demo Data ---- */
+
+            const demoMentor = {
+                id: "MNT-1001",
+                name: "Rahul Kumar",
+                specialization: "Computer Science",
+                experience: "5 Years",
+                status: "Active"
+            };
+
+            const mentorStudents = [
+                {
+                    id: "STU-1024",
+                    name: "Arun Kumar",
+                    grade: "Grade 10",
+                    className: "10-A",
+                    attendance: 94,
+                    average: 85.5,
+                    status: "Active",
+                    progress: [
+                        { subject: "Mathematics", score: 85 },
+                        { subject: "Science", score: 78 },
+                        { subject: "Computer Science", score: 91 }
+                    ]
+                },
+                {
+                    id: "STU-1025",
+                    name: "Priya Sharma",
+                    grade: "Grade 10",
+                    className: "10-B",
+                    attendance: 96,
+                    average: 89.0,
+                    status: "Active",
+                    progress: [
+                        { subject: "Mathematics", score: 92 },
+                        { subject: "Science", score: 88 },
+                        { subject: "Computer Science", score: 94 }
+                    ]
+                },
+                {
+                    id: "STU-1026",
+                    name: "Rahul Singh",
+                    grade: "Grade 9",
+                    className: "9-A",
+                    attendance: 88,
+                    average: 78.0,
+                    status: "Needs Attention",
+                    progress: [
+                        { subject: "Mathematics", score: 75 },
+                        { subject: "Science", score: 79 },
+                        { subject: "Computer Science", score: 81 }
+                    ]
+                }
+            ];
+
+            const mentorParents = [
+                {
+                    id: "PAR-1001",
+                    name: "Madhan Kumar",
+                    email: "madhan@example.com",
+                    studentId: "STU-1024",
+                    studentName: "Arun Kumar",
+                    studentGrade: "Grade 10",
+                    studentClass: "10-A",
+                    status: "Active"
+                },
+                {
+                    id: "PAR-1002",
+                    name: "Lakshmi Sharma",
+                    email: "lakshmi@example.com",
+                    studentId: "STU-1025",
+                    studentName: "Priya Sharma",
+                    studentGrade: "Grade 10",
+                    studentClass: "10-B",
+                    status: "Active"
+                },
+                {
+                    id: "PAR-1003",
+                    name: "Suresh Singh",
+                    email: "suresh@example.com",
+                    studentId: "STU-1026",
+                    studentName: "Rahul Singh",
+                    studentGrade: "Grade 9",
+                    studentClass: "9-A",
+                    status: "Active"
+                }
+            ];
+
+            // Mentor relationship source-of-truth
+            const mentorRelationships = [
+                {
+                    mentorId: "MNT-1001",
+                    student: { id: "STU-1024", name: "Arun Kumar",  grade: "Grade 10", className: "10-A" },
+                    parent:  { id: "PAR-1001", name: "Madhan Kumar",  email: "madhan@example.com" }
+                },
+                {
+                    mentorId: "MNT-1001",
+                    student: { id: "STU-1025", name: "Priya Sharma", grade: "Grade 10", className: "10-B" },
+                    parent:  { id: "PAR-1002", name: "Lakshmi Sharma", email: "lakshmi@example.com" }
+                },
+                {
+                    mentorId: "MNT-1001",
+                    student: { id: "STU-1026", name: "Rahul Singh",  grade: "Grade 9",  className: "9-A"  },
+                    parent:  { id: "PAR-1003", name: "Suresh Singh", email: "suresh@example.com" }
+                }
+            ];
+
+            const mentorSessions = [
+                { date: "Aug 26", time: "10:00 AM", student: "Arun Kumar",   subject: "Computer Science", status: "Scheduled" },
+                { date: "Aug 27", time: "2:00 PM",  student: "Priya Sharma", subject: "Mathematics",       status: "Scheduled" },
+                { date: "Aug 29", time: "11:30 AM", student: "Rahul Singh",  subject: "Science",            status: "Scheduled" }
+            ];
+
+            /* ---- Auth ---- */
+
+            function getCurrentUser() {
+                try {
+                    const s = sessionStorage.getItem(STORAGE_KEY_CURRENT_USER);
+                    if (s) return JSON.parse(s);
+                    const l = localStorage.getItem(STORAGE_KEY_CURRENT_USER);
+                    if (l) return JSON.parse(l);
+                } catch (e) { console.error(e); }
+                return null;
+            }
+
+            function redirectToCorrectDashboard(role) {
+                if (role === 'student') window.location.replace('student-dashboard.html');
+                else if (role === 'parent') window.location.replace('parent-dashboard.html');
+                else if (role === 'mentor') window.location.replace('mentor-dashboard.html');
+                else window.location.replace('index.html');
+            }
+
+            function logout() {
+                try {
+                    localStorage.removeItem(STORAGE_KEY_CURRENT_USER);
+                    sessionStorage.removeItem(STORAGE_KEY_CURRENT_USER);
+                } catch (e) { console.error(e); }
+                window.location.href = 'index.html';
+            }
+
+            /* ---- Render ---- */
+
+            function renderDashboardData(currentUser) {
+                // Resolve mentor profile fields: prefer session data, fall back to demo
+                const mentorName     = (currentUser && currentUser.fullName)       ? currentUser.fullName       : demoMentor.name;
+                const mentorId       = (currentUser && currentUser.mentorId)        ? currentUser.mentorId        : demoMentor.id;
+                const specialization = (currentUser && currentUser.specialization)  ? currentUser.specialization  : demoMentor.specialization;
+                const experience     = (currentUser && currentUser.experience)      ? currentUser.experience      : demoMentor.experience;
+                const initials       = mentorName.trim().split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'RK';
+
+                // 1. Profile
+                document.getElementById('profile-avatar').textContent             = initials;
+                document.getElementById('profile-name').textContent               = mentorName;
+                document.getElementById('profile-fullname').textContent           = mentorName;
+                document.getElementById('profile-specialization-sub').textContent = specialization + ' Mentor';
+                document.getElementById('profile-specialization').textContent     = specialization;
+                document.getElementById('profile-experience').textContent         = experience;
+                document.getElementById('profile-mentor-id').textContent          = mentorId;
+                document.getElementById('profile-mentor-id-tag').textContent      = mentorId;
+                document.getElementById('profile-students-count').textContent     = mentorStudents.length;
+                document.getElementById('profile-status').textContent             = 'Active';
+
+                // 2. My Students
+                document.getElementById('students-badge-count').textContent = mentorStudents.length + ' Assigned';
+                document.getElementById('students-list').innerHTML = mentorStudents.map(st => {
+                    const ini = st.name.trim().split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+                    const needsAttn = st.status === 'Needs Attention';
+                    return `
+                        <div class="student-card">
+                            <div class="student-card-header">
+                                <div class="student-ident">
+                                    <div class="student-avatar">${ini}</div>
+                                    <div class="student-name-group">
+                                        <h4>${st.name}</h4>
+                                        <div class="student-class-meta">${st.grade} &bull; Class ${st.className}</div>
+                                        <div class="student-id-tag">${st.id}</div>
+                                    </div>
+                                </div>
+                                <span class="status-pill ${needsAttn ? 'status-pill-warn' : ''}">${st.status}</span>
+                            </div>
+                            <div class="student-metrics-row">
+                                <div class="metric-box">
+                                    <span class="metric-title">Academic Average</span>
+                                    <span class="metric-score">${st.average}%</span>
+                                </div>
+                                <div class="metric-box">
+                                    <span class="metric-title">Attendance</span>
+                                    <span class="metric-score metric-score-green">${st.attendance}%</span>
+                                </div>
+                            </div>
+                        </div>`;
+                }).join('');
+
+                // 3. Student Progress
+                document.getElementById('progress-list').innerHTML = mentorStudents.map(st => `
+                    <div class="progress-student-block">
+                        <div class="progress-student-name">
+                            <span>${st.name}</span>
+                            <span style="font-size:12px;color:var(--ink-soft);font-weight:500;">${st.grade}</span>
+                        </div>
+                        <div class="progress-bars-group">
+                            ${st.progress.map(p => `
+                                <div class="subject-progress-row">
+                                    <div class="subject-row-meta">
+                                        <span class="subject-lbl">${p.subject}</span>
+                                        <span class="subject-val">${p.score}%</span>
+                                    </div>
+                                    <div class="progress-track">
+                                        <div class="progress-bar-fill" style="width:${p.score}%;"></div>
+                                    </div>
+                                </div>`).join('')}
+                        </div>
+                    </div>`).join('');
+
+                // 4. My Parents
+                document.getElementById('parents-badge-count').textContent = mentorParents.length + ' Connected';
+                document.getElementById('parents-grid').innerHTML = mentorParents.map(par => {
+                    const pi = par.name.trim().split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+                    return `
+                        <div class="parent-card">
+                            <div class="parent-card-header">
+                                <div class="parent-ident">
+                                    <div class="parent-avatar">${pi}</div>
+                                    <div class="parent-name-group">
+                                        <h4>${par.name}</h4>
+                                        <div class="parent-sub">Parent of ${par.studentName}</div>
+                                        <div class="parent-id-tag">${par.id}</div>
+                                    </div>
+                                </div>
+                                <span class="status-pill">${par.status}</span>
+                            </div>
+                            <div class="parent-details-list">
+                                <div class="parent-detail-row">
+                                    <span class="parent-detail-key">Email</span>
+                                    <span class="parent-detail-val">${par.email}</span>
+                                </div>
+                                <div class="parent-detail-row">
+                                    <span class="parent-detail-key">Student</span>
+                                    <span class="parent-detail-val">${par.studentName}</span>
+                                </div>
+                                <div class="parent-detail-row">
+                                    <span class="parent-detail-key">Grade &amp; Class</span>
+                                    <span class="parent-detail-val">${par.studentGrade} &bull; ${par.studentClass}</span>
+                                </div>
+                                <div class="parent-detail-row">
+                                    <span class="parent-detail-key">Student ID</span>
+                                    <span class="parent-detail-val" style="font-family:monospace;font-size:12px;">${par.studentId}</span>
+                                </div>
+                            </div>
+                        </div>`;
+                }).join('');
+
+                // 5. Upcoming Sessions
+                document.getElementById('sessions-list').innerHTML = mentorSessions.map(s => `
+                    <div class="session-card">
+                        <div class="session-left-meta">
+                            <div class="session-date-tag">
+                                <span class="session-date-day">${s.date}</span>
+                                <span class="session-date-hour">${s.time}</span>
+                            </div>
+                            <div class="session-details-group">
+                                <h4>${s.student}</h4>
+                                <div class="session-subject-tag">${s.subject}</div>
+                            </div>
+                        </div>
+                        <span class="session-badge-pill">${s.status}</span>
+                    </div>`).join('');
+            }
+
+            /* ---- Init (Auth Guard) ---- */
+
+            function init() {
+                const currentUser = getCurrentUser();
+
+                if (!currentUser) {
+                    window.location.replace('index.html');
+                    return;
+                }
+
+                if (currentUser.role !== 'mentor') {
+                    redirectToCorrectDashboard(currentUser.role);
+                    return;
+                }
+
+                const fullName  = currentUser.fullName || 'Mentor';
+                const firstName = fullName.trim().split(' ')[0] || fullName;
+                document.getElementById('greeting-title').textContent    = 'Hi mentor!';
+                document.getElementById('greeting-subtitle').textContent = 'Welcome back, ' + firstName + '.';
+                document.getElementById('nav-username').textContent      = fullName;
+
+                const initials = fullName.trim().split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'RK';
+                document.getElementById('nav-avatar').textContent = initials;
+
+                renderDashboardData(currentUser);
+                document.getElementById('btn-logout').addEventListener('click', logout);
+            }
+
+            window.MentorDashboard = {
+                getCurrentUser,
+                logout,
+                mentorStudents,
+                mentorParents,
+                mentorRelationships,
+                mentorSessions,
+                demoMentor,
+                redirectToCorrectDashboard,
+                init
+            };
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+        })();
+    </script>
+</body>
+
+</html>

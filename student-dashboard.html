@@ -276,7 +276,7 @@
 
         .cards-grid-bottom {
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: 1.1fr 0.9fr;
             gap: 24px;
         }
 
@@ -625,11 +625,150 @@
             gap: 6px;
         }
 
+        /* 6. My Mentor Section */
+
+        .mentor-profile-box {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .mentor-avatar-large {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--purple-500), var(--purple-700));
+            color: var(--white);
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px -2px rgba(92, 36, 194, 0.3);
+            flex-shrink: 0;
+        }
+
+        .mentor-title-info {
+            flex: 1;
+        }
+
+        .mentor-title-info h3 {
+            font-family: var(--font-display);
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        .mentor-title-info p {
+            font-size: 13px;
+            color: var(--ink-soft);
+            margin-top: 2px;
+        }
+
+        .mentor-status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #DCFCE7;
+            color: #166534;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11.5px;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+
+        .mentor-status-pill::before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #16A34A;
+        }
+
+        .mentor-details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .mentor-detail-cell {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 10px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .detail-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--ink-faint);
+            font-weight: 600;
+        }
+
+        .detail-value {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        .mentor-session-box {
+            background: linear-gradient(135deg, var(--purple-100), #F5F0FF);
+            border: 1.5px solid var(--purple-200);
+            border-radius: var(--radius-sm);
+            padding: 14px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .session-info-left h5 {
+            margin: 0 0 3px 0;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--purple-800);
+            font-weight: 700;
+        }
+
+        .session-topic {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        .session-time-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--white);
+            color: var(--purple-700);
+            border: 1px solid var(--purple-300);
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 12.5px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
         /* ---------- Responsive ---------- */
 
         @media (max-width: 980px) {
             .cards-grid-top,
-            .cards-grid-mid {
+            .cards-grid-mid,
+            .cards-grid-bottom {
                 grid-template-columns: 1fr;
             }
 
@@ -814,7 +953,7 @@
 
         </div>
 
-        <!-- BOTTOM GRID: 5. Upcoming Schedule -->
+        <!-- BOTTOM GRID: 5. Upcoming Schedule & 6. My Mentor -->
         <div class="cards-grid-bottom">
 
             <!-- SECTION 5: UPCOMING SCHEDULE -->
@@ -831,6 +970,58 @@
 
                 <div class="schedule-list" id="schedule-list">
                     <!-- Populated dynamically -->
+                </div>
+            </section>
+
+            <!-- SECTION 6: MY MENTOR -->
+            <section class="card">
+                <div class="card-header">
+                    <div class="card-title-group">
+                        <div class="card-icon" aria-hidden="true">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        </div>
+                        <h2 class="card-title">MY MENTOR</h2>
+                    </div>
+                    <span class="card-tag">Assigned Faculty</span>
+                </div>
+
+                <div class="mentor-profile-box">
+                    <div class="mentor-avatar-large" id="mentor-avatar">RK</div>
+                    <div class="mentor-title-info">
+                        <h3 id="mentor-name">Rahul Kumar</h3>
+                        <p id="mentor-role-title">Computer Science Mentor</p>
+                    </div>
+                    <span class="mentor-status-pill" id="mentor-status">Active</span>
+                </div>
+
+                <div class="mentor-details-grid">
+                    <div class="mentor-detail-cell">
+                        <span class="detail-label">Specialization</span>
+                        <span class="detail-value" id="mentor-specialization">Computer Science</span>
+                    </div>
+                    <div class="mentor-detail-cell">
+                        <span class="detail-label">Experience</span>
+                        <span class="detail-value" id="mentor-experience">5 Years</span>
+                    </div>
+                    <div class="mentor-detail-cell">
+                        <span class="detail-label">Mentor ID</span>
+                        <span class="detail-value" id="mentor-id" style="font-family: monospace;">MNT-1001</span>
+                    </div>
+                    <div class="mentor-detail-cell">
+                        <span class="detail-label">Students Mentored</span>
+                        <span class="detail-value" id="mentor-students-count">24</span>
+                    </div>
+                </div>
+
+                <div class="mentor-session-box">
+                    <div class="session-info-left">
+                        <h5>Upcoming Mentor Session</h5>
+                        <div class="session-topic" id="mentor-session-topic">Computer Science</div>
+                    </div>
+                    <div class="session-time-badge" id="mentor-session-datetime">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line></svg>
+                        <span>Aug 26 • 10:00 AM</span>
+                    </div>
                 </div>
             </section>
 
@@ -879,6 +1070,45 @@
                 ]
             };
 
+            // Mentor Relationship Frontend Demo Data
+            const mentorData = {
+                id: "MNT-1001",
+                name: "Rahul Kumar",
+                specialization: "Computer Science",
+                roleTitle: "Computer Science Mentor",
+                experience: "5 Years",
+                studentsMentored: 24,
+                status: "Active",
+                upcomingSession: {
+                    date: "Aug 26",
+                    time: "10:00 AM",
+                    topic: "Computer Science"
+                },
+                students: [
+                    {
+                        id: "STU-1024",
+                        name: "Arun Kumar",
+                        grade: "Grade 10",
+                        className: "10-A",
+                        attendance: 94,
+                        average: 85.5
+                    },
+                    {
+                        id: "STU-1025",
+                        name: "Priya Sharma",
+                        grade: "Grade 10",
+                        className: "10-B",
+                        attendance: 96,
+                        average: 89
+                    }
+                ]
+            };
+
+            const studentMentor = {
+                studentId: "STU-1024",
+                mentorId: "MNT-1001"
+            };
+
             /**
              * Retrieve current user session.
              */
@@ -895,6 +1125,22 @@
             }
 
             /**
+             * Redirect authenticated user to their correct dashboard page.
+             * @param {string} role
+             */
+            function redirectToCorrectDashboard(role) {
+                if (role === 'student') {
+                    window.location.replace('student-dashboard.html');
+                } else if (role === 'parent') {
+                    window.location.replace('parent-dashboard.html');
+                } else if (role === 'mentor') {
+                    window.location.replace('mentor-dashboard.html');
+                } else {
+                    window.location.replace('index.html');
+                }
+            }
+
+            /**
              * Logout handler.
              */
             function logout() {
@@ -908,7 +1154,7 @@
             }
 
             /**
-             * Populate all five student dashboard sections.
+             * Populate all student dashboard sections including mentor information.
              */
             function renderDashboardData() {
                 // 1. Courses
@@ -969,6 +1215,24 @@
                         </div>
                     </div>
                 `).join('');
+
+                // 6. My Mentor
+                document.getElementById('mentor-name').textContent = mentorData.name;
+                document.getElementById('mentor-role-title').textContent = mentorData.roleTitle || `${mentorData.specialization} Mentor`;
+                document.getElementById('mentor-specialization').textContent = mentorData.specialization;
+                document.getElementById('mentor-experience').textContent = mentorData.experience;
+                document.getElementById('mentor-id').textContent = mentorData.id;
+                document.getElementById('mentor-students-count').textContent = mentorData.studentsMentored;
+                document.getElementById('mentor-status').textContent = mentorData.status;
+
+                const mentorInitials = mentorData.name.trim().split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+                document.getElementById('mentor-avatar').textContent = mentorInitials || 'M';
+
+                document.getElementById('mentor-session-topic').textContent = mentorData.upcomingSession.topic;
+                document.getElementById('mentor-session-datetime').innerHTML = `
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line></svg>
+                    <span>${mentorData.upcomingSession.date} • ${mentorData.upcomingSession.time}</span>
+                `;
             }
 
             /**
@@ -983,15 +1247,9 @@
                     return;
                 }
 
-                // 2. Parent Role -> Redirect to Parent Dashboard
-                if (currentUser.role === 'parent') {
-                    window.location.replace('parent-dashboard.html');
-                    return;
-                }
-
-                // 3. Other/Invalid Role -> Redirect to Login
+                // 2. Validate Role -> Redirect if wrong dashboard
                 if (currentUser.role !== 'student') {
-                    logout();
+                    redirectToCorrectDashboard(currentUser.role);
                     return;
                 }
 
@@ -1016,6 +1274,9 @@
                 getCurrentUser,
                 logout,
                 studentDashboardData,
+                mentorData,
+                studentMentor,
+                redirectToCorrectDashboard,
                 init
             };
 
